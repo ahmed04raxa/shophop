@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shophop/domain/constants/app_colors.dart';
+import 'package:shophop/repository/screens/home/home_screen.dart';
 import 'package:shophop/repository/screens/signup/signup_screen.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
 
@@ -13,6 +15,29 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  Future<void> login(String email, String password) async {
+    if (email == "" || password == "") {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("All Filed Are Required")));
+    } else {
+      UserCredential? userCredential;
+      try {
+        userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((v) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            });
+      } on FirebaseAuthException catch (ex) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(ex.code.toString())));
+      }
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(height: 20),
           Uihelper.CustomButton(
             text: "Login",
-            callback: () {},
+            callback: () {
+              login(emailController.text, passwordController.text);
+            },
             fontWeight: FontWeight.bold,
             fontSize: 22,
             color: Colors.white,
