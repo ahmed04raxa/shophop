@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shophop/domain/constants/app_colors.dart';
@@ -14,22 +15,32 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  Future<void> signUp(String email, String password) async {
-    if (email == "" || password == "") {
+  TextEditingController usernameController = TextEditingController();
+
+  Future<void> signUp(String email, String password, String username) async {
+    if (email == "" || password == "" || username == "") {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("All Filed Are Required")));
     } else {
-      UserCredential? userCredential;
       try {
-        userCredential = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: email, password: password)
-            .then((v) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
+        UserCredential? userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password);
+        // STRORE USERNAME
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+              'uid': userCredential.user!.uid,
+              'username': username,
+              'email': email,
+              'password': password,
+              'role': 'user',
             });
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
       } on FirebaseAuthException catch (ex) {
         ScaffoldMessenger.of(
           context,
@@ -44,6 +55,16 @@ class _SignupScreenState extends State<SignupScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Uihelper.customTextField(
+                controller: usernameController,
+                hintText: "Enter Username",
+              ),
+            ],
+          ),
+          SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -67,7 +88,11 @@ class _SignupScreenState extends State<SignupScreen> {
           Uihelper.CustomButton(
             text: "Sign Up",
             callback: () {
-              signUp(emailController.text, passwordController.text);
+              signUp(
+                emailController.text,
+                passwordController.text,
+                usernameController.text,
+              );
             },
             fontWeight: FontWeight.bold,
             fontSize: 22,
