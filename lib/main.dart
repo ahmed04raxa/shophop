@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shophop/firebase_options.dart';
-import 'package:shophop/repository/screens/signup/signup_screen.dart';
+import 'package:shophop/repository/screens/admin/bottomnav/admin_bottom_nav_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         fontFamily: "regular",
       ),
-      home: SignupScreen(),
+      home: AdminBottomNavScreen(),
     );
   }
 }
