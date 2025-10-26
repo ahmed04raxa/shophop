@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shophop/repository/screens/admin/home/admin_home_screen.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
 
 class AddProduct extends StatefulWidget {
@@ -31,15 +32,23 @@ class _AddProductState extends State<AddProduct> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("All Fields Are Required!")));
-      
     } else {
-      await FirebaseFirestore.instance.collection("Products").doc().set({
-        'name': name,
-        'price': price,
-        'description': description,
-        'brand': brand,
-        'category': category,
-      });
+      await FirebaseFirestore.instance
+          .collection("Products")
+          .doc()
+          .set({
+            'name': name,
+            'price': price,
+            'description': description,
+            'brand': brand,
+            'category': category,
+          })
+          .then((v) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => AdminHomeScreen()),
+            );
+          });
     }
   }
 

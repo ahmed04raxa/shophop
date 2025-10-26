@@ -10,6 +10,13 @@ class AdminHomeScreen extends StatefulWidget {
 }
 
 class _AdminHomeScreenState extends State<AdminHomeScreen> {
+  Future<void> deleteProduct(String docId) async {
+    await FirebaseFirestore.instance.collection("Products").doc(docId).delete();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Product Deleted Successfully")));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +36,25 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               return ListTile(
+                leading: CircleAvatar(child: Text("${index + 1}")),
                 title: Text("${snapshot.data!.docs[index]['name']}"),
+                subtitle: Text("${snapshot.data!.docs[index]['description']}"),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit, color: Colors.blue),
+                      onPressed: () {},
+                    ),
+                    IconButton(
+                      // DELETE KRNA BHI SIKH LIA
+                      onPressed: () async {
+                        await deleteProduct(snapshot.data!.docs[index].id);
+                      },
+                      icon: Icon(Icons.delete, color: Colors.red),
+                    ),
+                  ],
+                ),
               );
             },
           );
