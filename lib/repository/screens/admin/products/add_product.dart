@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shophop/domain/constants/app_colors.dart';
 import 'package:shophop/repository/screens/admin/home/admin_home_screen.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
 
@@ -17,6 +20,20 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController brandController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
 
+  // TO PICK IMAMGE
+  final ImagePicker imagePicker = ImagePicker();
+  // TO SHOW / PREVIEW IMAGE
+  File? imageFile;
+
+  Future<void> pickImage() async {
+    final pickedImage = await imagePicker.pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      setState(() {
+        imageFile = File(pickedImage.path);
+      });
+    }
+  }
+
   Future<void> addProduct(
     String name,
     String price,
@@ -24,11 +41,11 @@ class _AddProductState extends State<AddProduct> {
     String brand,
     String category,
   ) async {
-    if (name == "" ||
-        price == "" ||
-        description == "" ||
-        brand == "" ||
-        category == "") {
+    if (name.isEmpty ||
+        price.isEmpty ||
+        description.isEmpty ||
+        brand.isEmpty ||
+        category.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("All Fields Are Required!")));
@@ -59,6 +76,32 @@ class _AddProductState extends State<AddProduct> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Padding(
+            padding: EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(),
+                Container(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      pickImage();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.buttonBackgroundColor,
+                    ),
+                    child: Text(
+                      "Add Image",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -114,8 +157,8 @@ class _AddProductState extends State<AddProduct> {
             children: [
               Uihelper.CustomButton(
                 text: "Add Product",
-                callback: () {
-                  addProduct(
+                callback: () async {
+                  await addProduct(
                     nameController.text,
                     priceController.text,
                     descriptionController.text,
@@ -124,6 +167,7 @@ class _AddProductState extends State<AddProduct> {
                   );
                 },
                 fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
             ],
           ),
