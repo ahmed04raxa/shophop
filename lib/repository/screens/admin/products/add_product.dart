@@ -33,6 +33,9 @@ class _AddProductState extends State<AddProduct> {
       });
     }
   }
+  // UPLOAD IMAGE ON SUPABASE
+
+  Future<void> uploadImageOnSupabase() async {}
 
   Future<void> addProduct(
     String name,
@@ -81,21 +84,23 @@ class _AddProductState extends State<AddProduct> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CircleAvatar(),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      pickImage();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.buttonBackgroundColor,
-                    ),
-                    child: Text(
-                      "Add Image",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                CircleAvatar(
+                  backgroundImage: imageFile != null
+                      ? FileImage(imageFile!)
+                      : null,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    pickImage();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.buttonBackgroundColor,
+                  ),
+                  child: Text(
+                    "Add Image",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
