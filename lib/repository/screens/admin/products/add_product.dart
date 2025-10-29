@@ -33,9 +33,29 @@ class _AddProductState extends State<AddProduct> {
       });
     }
   }
+
   // UPLOAD IMAGE ON SUPABASE
 
-  Future<void> uploadImageOnSupabase() async {}
+  Future<void> uploadImageOnSupabase() async {
+    if (imageFile == null) return;
+    // GENERATE A UNIQUE FILE PATH
+    final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
+    final filePath = 'uploads/$fileName';
+    // UPLOAD
+    // try {
+    //   final response = await Supabase.instance.client.storage
+    //       .from('images')
+    //       .upload(filePath, imageFile!);
+
+    //   final imageUrl = Supabase.instance.client.storage
+    //       .from('images')
+    //       .getPublicUrl(filePath);
+
+    //   print('✅ Upload successful: $imageUrl');
+    // } catch (e) {
+    //   print('❌ Upload failed: $e');
+    // }
+  }
 
   Future<void> addProduct(
     String name,
@@ -79,6 +99,21 @@ class _AddProductState extends State<AddProduct> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          ElevatedButton(
+            onPressed: () {
+              uploadImageOnSupabase();
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.buttonBackgroundColor,
+            ),
+            child: Text(
+              "Upload Image",
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           Padding(
             padding: EdgeInsets.all(15.0),
             child: Row(
@@ -89,6 +124,7 @@ class _AddProductState extends State<AddProduct> {
                       ? FileImage(imageFile!)
                       : null,
                 ),
+
                 ElevatedButton(
                   onPressed: () {
                     pickImage();
