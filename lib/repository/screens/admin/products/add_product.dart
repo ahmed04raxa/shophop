@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shophop/domain/constants/app_colors.dart';
 import 'package:shophop/repository/screens/admin/home/admin_home_screen.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -42,19 +43,19 @@ class _AddProductState extends State<AddProduct> {
     final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
     final filePath = 'uploads/$fileName';
     // UPLOAD
-    // try {
-    //   final response = await Supabase.instance.client.storage
-    //       .from('images')
-    //       .upload(filePath, imageFile!);
+    try {
+      final response = await Supabase.instance.client.storage
+          .from('')
+          .upload(filePath, imageFile!);
 
-    //   final imageUrl = Supabase.instance.client.storage
-    //       .from('images')
-    //       .getPublicUrl(filePath);
+      final imageUrl = Supabase.instance.client.storage
+          .from('images')
+          .getPublicUrl(filePath);
 
-    //   print('✅ Upload successful: $imageUrl');
-    // } catch (e) {
-    //   print('❌ Upload failed: $e');
-    // }
+      print('✅ Upload successful: $imageUrl');
+    } catch (e) {
+      print('❌ Upload failed: $e');
+    }
   }
 
   Future<void> addProduct(
