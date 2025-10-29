@@ -41,21 +41,16 @@ class _AddProductState extends State<AddProduct> {
     if (imageFile == null) return;
     // GENERATE A UNIQUE FILE PATH
     final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
-    final filePath = 'uploads/$fileName';
+    final filePath = 'productImages/$fileName';
     // UPLOAD
-    try {
-      final response = await Supabase.instance.client.storage
-          .from('')
-          .upload(filePath, imageFile!);
-
-      final imageUrl = Supabase.instance.client.storage
-          .from('images')
-          .getPublicUrl(filePath);
-
-      print('✅ Upload successful: $imageUrl');
-    } catch (e) {
-      print('❌ Upload failed: $e');
-    }
+    await Supabase.instance.client.storage
+        .from('productImages')
+        .upload(filePath, imageFile!)
+        .then((v) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Images Uploaded Successfuly!")),
+          );
+        });
   }
 
   Future<void> addProduct(
