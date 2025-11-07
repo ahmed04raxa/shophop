@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shophop/repository/screens/admin/home/admin_home_screen.dart';
+import 'package:shophop/repository/screens/admin/profile/admin_profile_screen.dart';
 
 class AdminBottomNavScreen extends StatefulWidget {
   const AdminBottomNavScreen({super.key});
@@ -9,7 +10,7 @@ class AdminBottomNavScreen extends StatefulWidget {
 }
 
 class _AdminBottomNavScreenState extends State<AdminBottomNavScreen> {
-  final List _pages = [AdminHomeScreen()];
+  final List _pages = [AdminHomeScreen(), AdminProfileScreen()];
   int currentIndex = 0;
 
   @override
@@ -25,7 +26,6 @@ class _AdminBottomNavScreenState extends State<AdminBottomNavScreen> {
         },
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'Favourite'),
           BottomNavigationBarItem(icon: Icon(Icons.abc), label: 'Profile'),
         ],
       ),

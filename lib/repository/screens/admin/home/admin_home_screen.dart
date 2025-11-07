@@ -31,33 +31,80 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return Center(child: Text("No products found"));
           }
-
-          return ListView.builder(
+          return GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+            ),
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
-              return ListTile(
-                leading: CircleAvatar(child: Text("${index + 1}")),
-                title: Text("${snapshot.data!.docs[index]['name']}"),
-                subtitle: Text("${snapshot.data!.docs[index]['description']}"),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () {},
+                    Container(
+                      height: 400,
+                      color: Colors.pink,
+                      child: Row(
+                        children: [
+                          Image.network(
+                            snapshot.data!.docs[index]['imageUrl'],
+                          ),
+                        ],
+                      ),
                     ),
-                    IconButton(
-                      // DELETE KRNA BHI SIKH LIA
-                      onPressed: () async {
-                        await deleteProduct(snapshot.data!.docs[index].id);
-                      },
-                      icon: Icon(Icons.delete, color: Colors.red),
+                    Text("${index + 1}"),
+                    Text("${snapshot.data!.docs[index]['name']}"),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () {},
+                        ),
+                        IconButton(
+                          // DELETE KRNA BHI SIKH LIA
+                          onPressed: () async {
+                            await deleteProduct(snapshot.data!.docs[index].id);
+                          },
+                          icon: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               );
             },
           );
+
+          // return ListView.builder(
+          //   itemCount: snapshot.data!.docs.length,
+          //   itemBuilder: (context, index) {
+          //     return ListTile(
+          //       leading: CircleAvatar(child: Text("${index + 1}")),
+          //       title: Text("${snapshot.data!.docs[index]['name']}"),
+          //       subtitle: Text("${snapshot.data!.docs[index]['description']}"),
+          //       trailing: Row(
+          //         mainAxisSize: MainAxisSize.min,
+          //         children: [
+          //           IconButton(
+          //             icon: Icon(Icons.edit, color: Colors.blue),
+          //             onPressed: () {},
+          //           ),
+          //           IconButton(
+          //             // DELETE KRNA BHI SIKH LIA
+          //             onPressed: () async {
+          //               await deleteProduct(snapshot.data!.docs[index].id);
+          //             },
+          //             icon: Icon(Icons.delete, color: Colors.red),
+          //           ),
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // );
+          //
         },
       ),
       floatingActionButton: FloatingActionButton(

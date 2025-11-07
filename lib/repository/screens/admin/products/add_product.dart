@@ -21,13 +21,17 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController brandController = TextEditingController();
   final TextEditingController categoryController = TextEditingController();
 
-  // TO PICK IMAMGE
+  // TO PICK IMAGE
   final ImagePicker imagePicker = ImagePicker();
   // TO SHOW / PREVIEW IMAGE
   File? imageFile;
-
+  // TO STORE IMAGE URL IN FIREBASE FIRESTORE
+  String? imageUrl;
+  // NEW METHOD TO UPLOAD IMAGE AND PRODUCT DATA
   Future<void> pickImage() async {
-    final pickedImage = await imagePicker.pickImage(source: ImageSource.camera);
+    final pickedImage = await imagePicker.pickImage(
+      source: ImageSource.camera,
+    );
     if (pickedImage != null) {
       setState(() {
         imageFile = File(pickedImage.path);
@@ -35,31 +39,18 @@ class _AddProductState extends State<AddProduct> {
     }
   }
 
-  // UPLOAD IMAGE ON SUPABASE
-
-  Future<void> uploadImageOnSupabase() async {
-    if (imageFile == null) return;
-    // GENERATE A UNIQUE FILE PATH
-    final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
-    final filePath = 'productImages/$fileName';
-    // UPLOAD
-    await Supabase.instance.client.storage
-        .from('productImages')
-        .upload(filePath, imageFile!)
-        .then((v) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Images Uploaded Successfuly!")),
-          );
-        });
-  }
-
-  Future<void> addProduct(
-    String name,
-    String price,
-    String description,
-    String brand,
-    String category,
-  ) async {
+  Future<void> addProducts() async {
+    if (imageFile == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Please Select Image First")));
+      return;
+    }
+    final name = nameController.text.trim();
+    final price = priceController.text.trim();
+    final description = descriptionController.text.trim();
+    final brand = brandController.text.trim();
+    final category = categoryController.text.trim();
     if (name.isEmpty ||
         price.isEmpty ||
         description.isEmpty ||
@@ -67,49 +58,127 @@ class _AddProductState extends State<AddProduct> {
         category.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("All Fields Are Required!")));
-    } else {
-      await FirebaseFirestore.instance
-          .collection("Products")
-          .doc()
-          .set({
-            'name': name,
-            'price': price,
-            'description': description,
-            'brand': brand,
-            'category': category,
-          })
-          .then((v) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => AdminHomeScreen()),
-            );
-          });
+      ).showSnackBar(const SnackBar(content: Text("All fields are required!")));
+      return;
+    }
+    try {
+
+      // Upload image to Sup abase Storage
+      final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
+      final filePath = 'productImages/$fileName';
+
+      await Supabase.instance.client.storage
+          .from('productImages')
+          .upload(filePath, imageFile!);
+      // 🔹 2. Get public URL
+      final publicUrl = Supabase.instance.client.storage
+          .from('productImages')
+          .getPublicUrl(filePath);
+      setState(() {
+        imageUrl = publicUrl;
+      });
+
+      // Save product data to Firestore
+      await FirebaseFirestore.instance.collection("Products").add({
+        'name': name,
+        'price': price,
+        'description': description,
+        'brand': brand,
+        'category': category,
+        'imageUrl': publicUrl,
+        'createdAt': Timestamp.now(),
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Product added successfully!")),
+      );
+
+      // Navigate to AdminHomeScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AdminHomeScreen()),
+      );
+    } catch (ex) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error: $ex")));
     }
   }
+
+  // UPLOAD IMAGE ON SUP ABASE
+
+  // Future<void> uploadImageOnSup abase() async {
+  //   if (imageFile == null) return;
+  //   // GENERATE A UNIQUE FILE PATH
+  //   final fileName = "${DateTime.now().millisecondsSinceEpoch}.jpg";
+  //   final filePath = 'productImages/$fileName';
+  //   // UPLOAD
+  //   await Sup abase.instance.client.storage
+  //       .from('productImages')
+  //       .upload(filePath, imageFile!)
+  //       .then((v) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(content: Text("Images Uploaded Successfully!")),
+  //         );
+  //       });
+  // }
+  //
+  // Future<void> addProduct(
+  //   String name,
+  //   String price,
+  //   String description,
+  //   String brand,
+  //   String category,
+  // ) async {
+  //   if (name.isEmpty ||
+  //       price.isEmpty ||
+  //       description.isEmpty ||
+  //       brand.isEmpty ||
+  //       category.isEmpty ||
+  //       imageUrl == null) {
+  //     ScaffoldMessenger.of(
+  //       context,
+  //     ).showSnackBar(SnackBar(content: Text("All Fields Are Required!")));
+  //   } else {
+  //     await FirebaseFirestore.instance
+  //         .collection("Products")
+  //         .doc()
+  //         .set({
+  //           'name': name,
+  //           'price': price,
+  //           'description': description,
+  //           'brand': brand,
+  //           'category': category,
+  //           'imageUrl': imageUrl,
+  //         })
+  //         .then((v) {
+  //           Navigator.pushReplacement(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => AdminHomeScreen()),
+  //           );
+  //         });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.red),
+      appBar: AppBar(title: Text("Add Product")),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              uploadImageOnSupabase();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.buttonBackgroundColor,
-            ),
-            child: Text(
-              "Upload Image",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {},
+          //   style: ElevatedButton.styleFrom(
+          //     backgroundColor: AppColors.buttonBackgroundColor,
+          //   ),
+          //   child: Text(
+          //     "Upload Image",
+          //     style: TextStyle(
+          //       color: Colors.white,
+          //       fontWeight: FontWeight.bold,
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: EdgeInsets.all(15.0),
             child: Row(
@@ -195,13 +264,14 @@ class _AddProductState extends State<AddProduct> {
               Uihelper.CustomButton(
                 text: "Add Product",
                 callback: () async {
-                  await addProduct(
-                    nameController.text,
-                    priceController.text,
-                    descriptionController.text,
-                    brandController.text,
-                    categoryController.text,
-                  );
+                  await addProducts();
+                  // await addProduct(
+                  //   nameController.text,
+                  //   priceController.text,
+                  //   descriptionController.text,
+                  //   brandController.text,
+                  //   categoryController.text,
+                  // );
                 },
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
