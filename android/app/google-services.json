@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "374669470820",
+    "project_id": "fir-series-93e7b",
+    "storage_bucket": "fir-series-93e7b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374669470820:android:a37dd2f813ae6150620371",
+        "android_client_info": {
+          "package_name": "com.example.mynewapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYuCh9bJeE180ON4XvYQ53Zvx-d_GwnQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374669470820:android:271119ce8fc41331620371",
+        "android_client_info": {
+          "package_name": "com.example.shophop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYuCh9bJeE180ON4XvYQ53Zvx-d_GwnQE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
