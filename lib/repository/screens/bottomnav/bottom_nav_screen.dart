@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:shophop/repository/screens/cart/cart_screen.dart';
-import 'package:shophop/repository/screens/favourite/Favourite_screen.dart';
+import 'package:shophop/repository/screens/favourite/favourite_screen.dart';
 import 'package:shophop/repository/screens/home/home_screen.dart';
 import 'package:shophop/repository/screens/profile/profile_screen.dart';
 

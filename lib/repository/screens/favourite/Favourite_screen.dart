@@ -14,13 +14,12 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("FAVOURITE SCREEN"),
-          ],
-        )
-      ],),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [Text("FAVOURITE SCREEN")],
+          ),
+        ],
+      ),
     );
   }
 }
