@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       //   "/login": (context) => LoginScreen(),
       //   "/signup": (context) => SignUpScreen(),
       // },
-      initialRoute: AppRoutes.bottomNavScreen,
+      initialRoute: AppRoutes.splashScreen,
       routes: AppRoutes.getRoutes(),
     ),
   );

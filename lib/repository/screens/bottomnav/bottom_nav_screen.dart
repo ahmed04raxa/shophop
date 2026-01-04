@@ -13,7 +13,7 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   int currentIndex = 0;
-  List pages = [HomeScreen(), WishlistScreen(), CartScreen(), SettingsScreen()];
+  List pages = [HomeScreen(), WishlistScreen(), CartScreen()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,14 +49,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
             ),
             label: 'Cart',
           ),
-          NavigationDestination(
-            selectedIcon: Image.asset("assets/images/settings.png"),
-            icon: Image.asset(
-              "assets/images/settings.png",
-              color: Color(0XFF000000),
-            ),
-            label: 'Settings',
-          ),
+
         ],
       ),
     );
