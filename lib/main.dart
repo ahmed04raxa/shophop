@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shophop/domain/constants/app_routes.dart';
+import 'package:shophop/provider/cart_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,8 +11,9 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => MultiProvider(
+    providers: [ChangeNotifierProvider(create: (_) => CartProvider())],
+    child: MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Shop Hop',
       theme: ThemeData(
@@ -25,6 +28,6 @@ class MyApp extends StatelessWidget {
       // },
       initialRoute: AppRoutes.bottomNavScreen,
       routes: AppRoutes.getRoutes(),
-    );
-  }
+    ),
+  );
 }

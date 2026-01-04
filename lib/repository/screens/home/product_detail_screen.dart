@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shophop/domain/constants/app_colors.dart';
 import 'package:shophop/models/product.dart';
+import 'package:shophop/provider/cart_provider.dart';
+import 'package:shophop/repository/widgets/add_to_cart.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -11,6 +13,7 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = CartProvider.of(context);
     return Scaffold(
       backgroundColor: Color(0XFFFDFDFD),
       appBar: AppBar(
@@ -59,27 +62,7 @@ class ProductDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.buttonBgColor,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(11),
-                ),
-              ),
-              child: Text("GO To Cart"),
-            ),
-            ElevatedButton(onPressed: () {}, child: Text("Add To Cart")),
-          ],
-        ),
-      ),
+      floatingActionButton: AddToCart(product: product),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
