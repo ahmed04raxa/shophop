@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shophop/domain/constants/app_colors.dart';
 import 'package:shophop/provider/cart_provider.dart';
@@ -29,6 +30,25 @@ class _CartScreenState extends State<CartScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Color(0XFFFDFDFD),
+      appBar: AppBar(
+        backgroundColor: Color(0XFFFDFDFD),
+        leading: Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(CupertinoIcons.back, color: Color(0XFF323232), size: 32),
+          ),
+        ),
+        title: Text(
+          "MY CART",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            fontFamily: "bold",
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Column(
           children: [

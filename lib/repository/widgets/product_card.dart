@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shophop/models/product.dart';
+import 'package:shophop/provider/favourite_provider.dart';
 import 'package:shophop/repository/screens/home/product_detail_screen.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
 
@@ -9,6 +10,7 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = FavouriteProvider.of(context);
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -30,13 +32,20 @@ class ProductCard extends StatelessWidget {
               Positioned(
                 top: 8,
                 right: 8,
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.favorite_border_rounded,
-                    size: 20,
-                    color: Colors.red,
+                child: GestureDetector(
+                  onTap: () {
+                    provider.toggleFavourite(product);
+                  },
+                  child: CircleAvatar(
+                    radius: 14,
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      provider.isExist(product)
+                          ? Icons.favorite
+                          : Icons.favorite_border_rounded,
+                      size: 20,
+                      color: Colors.red,
+                    ),
                   ),
                 ),
               ),

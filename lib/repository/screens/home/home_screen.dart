@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shophop/models/product.dart';
-import 'package:shophop/repository/screens/home/product_detail_screen.dart';
 import 'package:shophop/repository/widgets/product_card.dart';
 import 'package:shophop/repository/widgets/ui_helper.dart';
 

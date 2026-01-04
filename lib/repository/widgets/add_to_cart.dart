@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shophop/domain/constants/app_colors.dart';
 import 'package:shophop/models/product.dart';
 
 import '../../provider/cart_provider.dart';
@@ -76,7 +77,7 @@ class _AddToCartState extends State<AddToCart> {
               child: Container(
                 height: 55,
                 decoration: BoxDecoration(
-                  color: Colors.purple,
+                  color: AppColors.buttonBgColor,
                   borderRadius: BorderRadius.circular(50),
                 ),
                 alignment: Alignment.center,
@@ -86,6 +87,7 @@ class _AddToCartState extends State<AddToCart> {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontFamily: "bold",
                     fontSize: 20,
                   ),
                 ),
