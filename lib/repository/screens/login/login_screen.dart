@@ -76,7 +76,9 @@ class _LoginScreenState extends State<LoginScreen> {
             CustomButton(
               mWidth: 332,
               mHeight: 56,
-              callback: () {},
+              callback: () {
+                Navigator.pushNamed(context, AppRoutes.bottomNavScreen);
+              },
               text: "Login",
             ),
             SizedBox(height: 40),
